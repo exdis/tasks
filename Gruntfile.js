@@ -26,9 +26,13 @@ module.exports = function (grunt) {
 		},
 
 		concat : {
-			dist : {
-				src : ['src/js/*'],
-				dest : 'dest/build.js'
+			scripts : {
+				src : ['lib/*','src/js/*'],
+				dest : 'js/script.js'
+			},
+			css : {
+				src : ['stylesheets/*','src/css/*'],
+				dest : 'css/style.css'	
 			}
 		},
 
@@ -38,18 +42,26 @@ module.exports = function (grunt) {
 				banner: '/* <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n'
 			},
 			build : {
-				src : 'dest/build.clean.js',
-				dest : 'dest/build.min.js'
+				src : 'js/script.clean.js',
+				dest : 'js/script.min.js'
 			}
 		},
 
 		cssmin : {
 			with_banner : {
 				options : {
-					banner : '/* Some banner text */',
+					banner : '/* Styles for <%= pkg.name %> */',
 				},
 				files : {
-					'dest/style.min.css' : ['src/css/*']
+					'css/style.min.css' : ['src/css/*','stylesheets/*']
+				}
+			}
+		},
+
+		compass: {
+			dist: {
+				options: {
+					config: 'config.rb'
 				}
 			}
 		},
@@ -57,18 +69,37 @@ module.exports = function (grunt) {
 		watch : {
 			scripts : {
 				files : ['src/js/*.js'],
-				tasks : ['jshint', 'concat', 'removelogging', 'uglify']	
+				tasks : ['jshint', 'concat', 'removelogging', 'uglify'],
+				options: {
+					livereload: true,
+				}
+			},
+			sass : {
+				files : ['sass/*'],
+				tasks : ['compass','concat','cssmin'],
+				options: {
+					livereload: true,
+				}
 			},
 			css : {
 				files : ['src/css/*.css'],
-				tasks : ['cssmin']
+				tasks : ['concat','cssmin'],
+				options: {
+					livereload: true,
+				}
+			},
+			html : {
+				files : ['**/*.html'],
+				options: {
+					livereload: true,
+				}
 			}
 		},
 
 		removelogging : {
 			dist : {
-				src: 'dest/build.js',
-				dest : 'dest/build.clean.js'
+				src: 'js/script.js',
+				dest : 'js/script.clean.js'
 			}
 		},
 
@@ -85,6 +116,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-remove-logging');
 	grunt.loadNpmTasks('grunt-notify');
@@ -92,6 +124,6 @@ module.exports = function (grunt) {
 	// This is required if you use any options.
 	grunt.task.run('notify_hooks');
 
-	grunt.registerTask('default',['jshint','concat','removelogging','uglify','cssmin','watch']);
+	grunt.registerTask('default',['jshint','concat','removelogging','uglify','compass','cssmin','watch']);
 	grunt.registerTask('test', ['']);
 };
