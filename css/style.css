@@ -76,15 +76,3 @@ a img {
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
-
-* {
-	font-size: 16px;
-	padding-bottom: 20px;
-}
-body {
-	background: black;
-}
-p {
-	color: red;
-	font-size: 20px;
-}
