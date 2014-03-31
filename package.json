@@ -10,6 +10,7 @@
 		"grunt-contrib-cssmin" : "latest",
 		"grunt-contrib-compass" : "latest",
 		"grunt-contrib-watch" : "latest",
-		"grunt-remove-logging" : "latest"
+		"grunt-remove-logging" : "latest",
+		"grunt-contrib-requirejs" : "latest"
 	}
 }

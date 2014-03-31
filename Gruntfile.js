@@ -15,6 +15,7 @@ module.exports = function (grunt) {
 				eqnull : true,
 				browser : true,
 				globals : {
+					define : false,
 					jQuery : true,
 					$ : true,
 					console : true
@@ -25,10 +26,21 @@ module.exports = function (grunt) {
 			}
 		},
 
+		requirejs: {
+			compile: {
+				options: {
+					baseUrl : "./",
+					mainConfigFile : "js/main.js",
+					out : "js/app.bulild.js",
+					name : "js/app"
+				}
+			}
+		},
+
 		concat : {
 			scripts : {
-				src : ['lib/*','src/js/*'],
-				dest : 'js/script.js'
+				src : ['src/js/*'],
+				dest : 'js/app.js'
 			},
 			css : {
 				src : ['stylesheets/*','src/css/*'],
@@ -69,7 +81,7 @@ module.exports = function (grunt) {
 		watch : {
 			scripts : {
 				files : ['src/js/*.js'],
-				tasks : ['jshint', 'concat', 'removelogging', 'uglify'],
+				tasks : ['jshint', 'concat', 'requirejs'],
 				options: {
 					livereload: true,
 				}
@@ -98,8 +110,8 @@ module.exports = function (grunt) {
 
 		removelogging : {
 			dist : {
-				src: 'js/script.js',
-				dest : 'js/script.clean.js'
+				src: 'js/app.dirty.js',
+				dest : 'js/app.js'
 			}
 		},
 
@@ -120,10 +132,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-remove-logging');
 	grunt.loadNpmTasks('grunt-notify');
+	grunt.loadNpmTasks('grunt-contrib-requirejs');
 
 	// This is required if you use any options.
 	grunt.task.run('notify_hooks');
 
-	grunt.registerTask('default',['jshint','concat','removelogging','uglify','compass','cssmin','watch']);
+	grunt.registerTask('default',['jshint','concat','requirejs','compass','cssmin','watch']);
 	grunt.registerTask('test', ['']);
 };

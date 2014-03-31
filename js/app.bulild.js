@@ -1,0 +1,1 @@
+define("app",["jquery"],function(e){e(function(){e("body").append("<p>Hello world</p>")})}),define("js/app",function(){});
