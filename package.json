@@ -11,6 +11,7 @@
 		"grunt-contrib-compass" : "latest",
 		"grunt-contrib-watch" : "latest",
 		"grunt-remove-logging" : "latest",
-		"grunt-contrib-requirejs" : "latest"
+		"grunt-contrib-requirejs" : "latest",
+		"grunt-contrib-copy" : "latest"
 	}
 }

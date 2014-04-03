@@ -38,10 +38,6 @@ module.exports = function (grunt) {
 		},
 
 		concat : {
-			scripts : {
-				src : ['src/js/*'],
-				dest : 'js/app.js'
-			},
 			css : {
 				src : ['stylesheets/*','src/css/*'],
 				dest : 'css/style.css'	
@@ -54,8 +50,25 @@ module.exports = function (grunt) {
 				banner: '/* <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n'
 			},
 			build : {
-				src : 'js/script.clean.js',
-				dest : 'js/script.min.js'
+				files : [{
+					expand : true,
+					src : '**/*.js',
+					dest : 'js',
+					cwd : 'src/js',
+					ext : '.min.js'
+				}]
+			}
+		},
+
+		copy : {
+			scripts : {
+				files : [{
+					expand: true,
+						cwd: 'src/js',
+						src: ['**'],
+						dest: 'js',
+						filter: 'isFile'
+				}]
 			}
 		},
 
@@ -81,7 +94,7 @@ module.exports = function (grunt) {
 		watch : {
 			scripts : {
 				files : ['src/js/*.js'],
-				tasks : ['jshint', 'concat', 'requirejs'],
+				tasks : ['jshint', 'uglify', 'copy', 'requirejs'],
 				options: {
 					livereload: true,
 				}
@@ -133,10 +146,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-remove-logging');
 	grunt.loadNpmTasks('grunt-notify');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
 	// This is required if you use any options.
 	grunt.task.run('notify_hooks');
 
-	grunt.registerTask('default',['jshint','concat','requirejs','compass','cssmin','watch']);
+	grunt.registerTask('default',['jshint','concat', 'copy', 'uglify','requirejs','compass','cssmin','watch']);
 	grunt.registerTask('test', ['']);
 };
