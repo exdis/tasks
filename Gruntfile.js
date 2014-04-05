@@ -16,6 +16,7 @@ module.exports = function (grunt) {
 				browser : true,
 				globals : {
 					define : false,
+					angular : false,
 					jQuery : true,
 					$ : true,
 					console : true
@@ -54,7 +55,7 @@ module.exports = function (grunt) {
 					expand : true,
 					src : '**/*.js',
 					dest : 'js',
-					cwd : 'src/js',
+					cwd : 'src/',
 					ext : '.min.js'
 				}]
 			}
@@ -63,11 +64,10 @@ module.exports = function (grunt) {
 		copy : {
 			scripts : {
 				files : [{
-					expand: true,
-						cwd: 'src/js',
-						src: ['**'],
-						dest: 'js',
-						filter: 'isFile'
+					expand : true,
+					cwd : 'src/',
+					src : ['**'],
+					dest : 'js/'
 				}]
 			}
 		},
@@ -93,7 +93,7 @@ module.exports = function (grunt) {
 
 		watch : {
 			scripts : {
-				files : ['src/js/*.js'],
+				files : ['src/**/*.js'],
 				tasks : ['jshint', 'uglify', 'copy', 'requirejs'],
 				options: {
 					livereload: true,

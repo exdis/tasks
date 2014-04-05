@@ -1,1 +1,1 @@
-define("app",["jquery"],function(e){e(function(){e("body").append("<p>Hello world</p>")})}),define("js/app",function(){});
+define("app",["angular","controller"],function(e){return e.module("exdisme",[])}),define("js/app",function(){});

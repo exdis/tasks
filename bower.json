@@ -1,8 +1,9 @@
 {
-	"name" : "GruntJS Bower Requirejs template",
-	"version" : "1.0.0",
+	"name" : "exdis.me blog",
+	"version" : "0.0.1",
 	"dependencies" : {
 		"jquery" : null,
-		"requirejs" : null	
+		"requirejs" : null,
+		"angular" : null
 	}
 }
