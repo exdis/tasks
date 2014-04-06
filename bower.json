@@ -4,6 +4,7 @@
 	"dependencies" : {
 		"jquery" : null,
 		"requirejs" : null,
-		"angular" : null
+		"angular" : null,
+		"angular-route" : null
 	}
 }

@@ -1,5 +1,5 @@
 require(["app"], function(app) {
-	return app.controller('ctrl',function($scope) {
-		$scope.data = { message : "Hello!" }
+	return app.controller('ctrl',function($scope, Posts) {
+		$scope.posts = Posts;
 	});
 });
