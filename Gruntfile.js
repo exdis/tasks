@@ -31,9 +31,9 @@ module.exports = function (grunt) {
 			compile: {
 				options: {
 					baseUrl : "./",
-					mainConfigFile : "js/main.js",
-					out : "js/app.bulild.js",
-					name : "js/app"
+					mainConfigFile : "public/javascripts/main.js",
+					out : "public/javascripts/app.bulild.js",
+					name : "public/javascripts/app"
 				}
 			}
 		},
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
 		concat : {
 			css : {
 				src : ['stylesheets/*','src/css/*'],
-				dest : 'css/style.css'	
+				dest : 'public/stylesheets/style.css'	
 			}
 		},
 
@@ -54,7 +54,7 @@ module.exports = function (grunt) {
 				files : [{
 					expand : true,
 					src : '**/*.js',
-					dest : 'js',
+					dest : 'public/javascripts/',
 					cwd : 'src/',
 					ext : '.min.js'
 				}]
@@ -67,7 +67,7 @@ module.exports = function (grunt) {
 					expand : true,
 					cwd : 'src/',
 					src : ['**'],
-					dest : 'js/'
+					dest : 'public/javascripts/'
 				}]
 			}
 		},
@@ -78,7 +78,7 @@ module.exports = function (grunt) {
 					banner : '/* Styles for <%= pkg.name %> */',
 				},
 				files : {
-					'css/style.min.css' : ['src/css/*','stylesheets/*']
+					'css/style.min.css' : ['src/css/*','public/stylesheets/*']
 				}
 			}
 		},
@@ -120,14 +120,14 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-
+/*
 		removelogging : {
 			dist : {
 				src: 'js/app.dirty.js',
 				dest : 'js/app.js'
 			}
 		},
-
+*/
 		notify_hooks: {
 			options: {
 				enabled: true,
