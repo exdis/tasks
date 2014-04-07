@@ -27,17 +27,6 @@ module.exports = function (grunt) {
 			}
 		},
 
-		requirejs: {
-			compile: {
-				options: {
-					baseUrl : "./",
-					mainConfigFile : "public/javascripts/main.js",
-					out : "public/javascripts/app.bulild.js",
-					name : "public/javascripts/app"
-				}
-			}
-		},
-
 		concat : {
 			css : {
 				src : ['stylesheets/*','src/css/*'],
@@ -94,7 +83,7 @@ module.exports = function (grunt) {
 		watch : {
 			scripts : {
 				files : ['src/**/*.js'],
-				tasks : ['jshint', 'uglify', 'copy', 'requirejs'],
+				tasks : ['jshint', 'uglify', 'copy'],
 				options: {
 					livereload: true,
 				}
@@ -145,12 +134,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-remove-logging');
 	grunt.loadNpmTasks('grunt-notify');
-	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 
 	// This is required if you use any options.
 	grunt.task.run('notify_hooks');
 
-	grunt.registerTask('default',['jshint','concat', 'copy', 'uglify','requirejs','compass','cssmin','watch']);
+	grunt.registerTask('default',['jshint','concat', 'copy', 'uglify','compass','cssmin','watch']);
 	grunt.registerTask('test', ['']);
 };

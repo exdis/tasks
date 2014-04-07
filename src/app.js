@@ -1,35 +1,20 @@
-define('app',["angular","angular-route","controller"], function(angular) {
-	var app = angular.module('exdisme',['ngRoute']);
+define([
+	'angular',
+	'filters',
+	'services',
+	'directives',
+	'controllers',
+	'angular-route',
+	], function (angular, filters, services, directives, controllers) {
+		'use strict';
 
-	app.factory('Posts', function() {
-		var Posts = [
-			{
-				title: "First Post",
-				content: "First content",
-				pubDate: "05.04.2014"
-			},
-			{
-				title: "Second Post",
-				content: "Second content",
-				pubDate: "06.04.2014"
-			}
-		];
-		return Posts;
-	});
-
-	app.config(['$routeProvider',
-		function($routeProvider) {
-			$routeProvider.
-				when('/', {
-				templateUrl: 'templates/index.html',
-				controller: 'ctrl'
-			}).
-			otherwise({
-				redirectTo: '/'
-			});
-		}
+	// Declare app level module which depends on filters, and services
+		
+	return angular.module('app', [
+		'ngRoute',
+		'app.controllers',
+		'app.filters',
+		'app.services',
+		'app.directives'
 	]);
-
-	return app;
-
 });
