@@ -5,11 +5,13 @@ requirejs.config({
       "jquery": "jquery/dist/jquery.min",
       "angular": "angular/angular",
       "angular-route": "angular-route/angular-route",
+      "angular-resource": "angular-resource/angular-resource",
       "controllers": "../controllers",
       "routes": "../routes",
       "directives": "../directives",
       "filters": "../filters",
       "services": "../services",
+      "moment": "moment/moment"
     },
     "shim": {
         "angular": {
@@ -17,6 +19,9 @@ requirejs.config({
         },
         "angular-route": {
         	deps: ['angular']
+        },
+        "angular-resouce" : {
+          deps: ['angular']
         }
     },
     priority: [

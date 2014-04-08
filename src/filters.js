@@ -1,12 +1,13 @@
-define(['angular', 'services'], function (angular, services) {
+define(['angular', 'services','moment'], function (angular, services, moment) {
 	'use strict';
 
 	/* Filters */
   
 	angular.module('app.filters', ['app.services'])
-		.filter('interpolate', ['version', function(version) {
-			return function(text) {
-				return String(text).replace(/\%VERSION\%/mg, version);
-			};
-	}]);
+		.filter('parseDate', function() {
+			return function(date) {
+				var d = new Date(date);
+				return moment(d).format("DD.MM.YYYY");
+			}
+	});
 });

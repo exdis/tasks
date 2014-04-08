@@ -3,22 +3,11 @@ define(['angular'], function (angular) {
 	
 	/* Services */
 
-	return angular.module('app.services', [])
-		.service('Posts', function() {
-			this.get = function() {
-				return [
-					{
-						title: "First Post",
-						content: "First content",
-						pubDate: "05.04.2014"
-					},
-					{
-						title: "Second Post",
-						content: "Second content",
-						pubDate: "06.04.2014"
-					}
-				]
-			}
+	return angular.module('app.services', ['ngResource'])
+		.factory('Posts', function($resource) {
+			return $resource('api/posts',{},{
+				get: {method: 'GET', isArray:true}
+			});
 		});
 
 });

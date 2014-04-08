@@ -5,6 +5,8 @@
 		"jquery" : null,
 		"requirejs" : null,
 		"angular" : null,
-		"angular-route" : null
+		"angular-route" : null,
+		"angular-resource": null,
+		"moment" : null
 	}
 }

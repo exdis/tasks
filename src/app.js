@@ -5,6 +5,7 @@ define([
 	'directives',
 	'controllers',
 	'angular-route',
+	'angular-resource',
 	], function (angular, filters, services, directives, controllers) {
 		'use strict';
 
