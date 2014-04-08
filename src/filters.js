@@ -8,6 +8,6 @@ define(['angular', 'services','moment'], function (angular, services, moment) {
 			return function(date) {
 				var d = new Date(date);
 				return moment(d).format("DD.MM.YYYY");
-			}
+			};
 	});
 });

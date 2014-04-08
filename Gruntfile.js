@@ -16,6 +16,8 @@ module.exports = function (grunt) {
 				browser : true,
 				globals : {
 					define : false,
+					require : false,
+					requirejs : false,
 					angular : false,
 					jQuery : true,
 					$ : true,
@@ -23,7 +25,7 @@ module.exports = function (grunt) {
 				}
 			},
 			"<%= pkg.name %>" : {
-				src : [ 'src/js/**/*.js' ]
+				src : [ 'src/**/*.js' ]
 			}
 		},
 
