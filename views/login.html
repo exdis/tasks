@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title></title>
+	<link href="stylesheets/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<% if (message.length > 0) { %>
+		<div class="alert alert-danger"><%= message %></div>
+	<% } %>
+	<form action="/login" method="post">
+		<label for="">E-mail</label>
+		<input type="text" name="email">
+		<hr>
+		<label for="">Password</label>
+		<input type="password" name="password">
+		<button type="submit">Login</button>
+	</form>
+</div>
+</body>
+</html>

@@ -9,7 +9,10 @@ var log = require('./server/log')(module);
 var config  = require('./server/config');
 var routes = require('./routes');
 var PostModel = require('./server/mongoose').PostModel;
+var User = require('./server/mongoose').User;
 var api = require('./routes/api');
+var passport = require('passport');
+var flash = require('connect-flash');
 var http = require('http');
 var path = require('path');
 
@@ -22,11 +25,20 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use(express.favicon());
 app.use(express.logger('dev'));
+app.use(express.cookieParser());
+app.use(express.bodyParser());
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(app.router);
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(express.session({ secret: 'exidsmerules' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash());
+
+app.use(app.router);
 
 // development only
 if ('development' == app.get('env')) {
@@ -48,6 +60,45 @@ app.use(function(err, req, res, next){
 });
 
 app.get('/', routes.index);
+app.get('/login', function(req, res) {
+    res.render('login', { message: req.flash('loginMessage') });
+});
+
+var LocalStrategy = require('passport-local').Strategy;
+
+passport.use('local-login', new LocalStrategy({
+    // by default, local strategy uses username and password, we will override with email
+    usernameField : 'email',
+    passwordField : 'password',
+    passReqToCallback : true // allows us to pass back the entire request to the callback
+},function(req, email, password, done) { // callback with email and password from our form
+
+    // find a user whose email is the same as the forms email
+    // we are checking to see if the user trying to login already exists
+    User.findOne({ 'local.email' :  email }, function(err, user) {
+        // if there are any errors, return the error before anything else
+        if (err)
+            return done(err);
+
+        // if no user is found, return the message
+        if (!user)
+            return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+
+        // if the user is found but the password is wrong
+        if (!user.validPassword(password))
+            return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+
+        // all is well, return successful user
+        return done(null, user);
+    });
+
+}));
+
+app.post('/login', passport.authenticate('local-login', {
+    successRedirect : '/profile', // redirect to the secure profile section
+    failureRedirect : '/login'
+}));
+
 app.get('/api', function(req, res) {
 	res.send('API is running');
 });
