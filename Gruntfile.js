@@ -111,6 +111,12 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+
+		nodemon: {
+			dev: {
+				script: 'app.js'
+			}
+		},
 /*
 		removelogging : {
 			dist : {
@@ -137,10 +143,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-remove-logging');
 	grunt.loadNpmTasks('grunt-notify');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-nodemon');
 
 	// This is required if you use any options.
 	grunt.task.run('notify_hooks');
 
-	grunt.registerTask('default',['jshint','concat', 'copy', 'uglify','compass','cssmin','watch']);
+	grunt.registerTask('default',['jshint','concat', 'copy', 'uglify','compass','cssmin','nodemon','watch']);
 	grunt.registerTask('test', ['']);
 };

@@ -21,6 +21,7 @@
 		"grunt-contrib-watch" : "latest",
 		"grunt-remove-logging" : "latest",
 		"grunt-contrib-requirejs" : "latest",
-		"grunt-contrib-copy" : "latest"
+		"grunt-contrib-copy" : "latest",
+		"grunt-nodemon" : "latest"
 	}
 }
