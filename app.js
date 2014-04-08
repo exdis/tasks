@@ -95,7 +95,7 @@ passport.use('local-login', new LocalStrategy({
 }));
 
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/profile', // redirect to the secure profile section
+    successRedirect : '/admin', // redirect to the admin page
     failureRedirect : '/login'
 }));
 
