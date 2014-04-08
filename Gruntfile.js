@@ -131,6 +131,13 @@ module.exports = function (grunt) {
 				max_jshint_notifications: 5, // maximum number of notifications from jshint output
 				title: "<%= pkg.name %>" // defaults to the name in package.json, or will use project directory's name
 			}
+		},
+
+		migrations : {
+			path: 'migrations/',
+			mongo: 'mongodb://localhost/exdisme',
+			template: grunt.file.read("migration.js"),
+			ext: 'js'
 		}
 	});
 
@@ -144,10 +151,12 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-notify');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-nodemon');
+	grunt.loadNpmTasks('grunt-mongo-migrations');
 
 	// This is required if you use any options.
 	grunt.task.run('notify_hooks');
 
 	grunt.registerTask('default',['jshint','concat', 'copy', 'uglify','compass','cssmin','nodemon','watch']);
 	grunt.registerTask('test', ['']);
+	grunt.registerTask('migrate', ['migrations']);
 };

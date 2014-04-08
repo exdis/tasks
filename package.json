@@ -26,6 +26,7 @@
 		"grunt-remove-logging" : "latest",
 		"grunt-contrib-requirejs" : "latest",
 		"grunt-contrib-copy" : "latest",
-		"grunt-nodemon" : "latest"
+		"grunt-nodemon" : "latest",
+		"grunt-mongo-migrations" : "latest"
 	}
 }
