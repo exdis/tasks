@@ -1,7 +1,7 @@
 <div ng-controller="ctrl">
 	<input type="text" ng-model="search.$">
 	<div class="post" ng-repeat="post in posts | orderBy: '-pubDate' | filter:search">
-		<h1>{{post.title}}</h1>
+		<a href="view/{{post._id}}"><h1>{{post.title}}</h1></a>
 		<span class="date">{{post.pubDate|parseDate}}</span>
 		<p>{{post.content}}</p>
 	</div>

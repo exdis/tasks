@@ -7,6 +7,10 @@ define(['angular', 'app'], function(angular, app) {
 			templateUrl: 'templates/index.html',
 			controller: 'ctrl'
 		});
+		$routeProvider.when('/view/:id', {
+			templateUrl: 'templates/view.html',
+			controller: 'view'
+		});
 		$routeProvider.when('/admin', {
 			templateUrl: 'templates/admin.html',
 			controller: 'admin'

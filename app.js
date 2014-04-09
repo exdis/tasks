@@ -124,6 +124,14 @@ app.get('/admin',isLoggedIn, function(req, res) {
     res.render('index');
 });
 
+app.get('/admin/*',isLoggedIn, function(req, res) {
+    res.render('index');
+});
+
+app.get('/view/*', function(req, res) {
+    res.render('index');
+});
+
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
