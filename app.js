@@ -145,7 +145,7 @@ app.get('/api/posts', function(req, res) {
     });
 });
 
-app.post('/api/posts', function(req, res) {
+app.post('/api/posts', isLoggedIn, function(req, res) {
     var post = new PostModel({
         title: req.body.title,
         content: req.body.content,

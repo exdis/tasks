@@ -11,6 +11,10 @@ define(['angular', 'app'], function(angular, app) {
 			templateUrl: 'templates/admin.html',
 			controller: 'admin'
 		});
+		$routeProvider.when('/admin/new', {
+			templateUrl: 'templates/admin/new.html',
+			controller: 'admin'
+		});
 		$routeProvider.otherwise({redirectTo: '/'});
 	});
 
