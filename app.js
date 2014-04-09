@@ -110,6 +110,25 @@ app.post('/login', passport.authenticate('local-login', {
     failureRedirect : '/login'
 }));
 
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on 
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
+
+app.get('/admin',isLoggedIn, function(req, res) {
+    res.render('index');
+});
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
 app.get('/api', function(req, res) {
 	res.send('API is running');
 });
