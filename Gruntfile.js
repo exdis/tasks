@@ -156,7 +156,8 @@ module.exports = function (grunt) {
 	// This is required if you use any options.
 	grunt.task.run('notify_hooks');
 
-	grunt.registerTask('default',['jshint','concat', 'copy', 'uglify','compass','cssmin','nodemon','watch']);
+	grunt.registerTask('default',['jshint','concat', 'copy', 'uglify','compass','cssmin','watch']);
 	grunt.registerTask('test', ['']);
+	grunt.registerTask('node', ['nodemon']);
 	grunt.registerTask('migrate', ['migrations']);
 };

@@ -20,12 +20,12 @@ requirejs.config({
         "angular-route": {
         	deps: ['angular']
         },
-        "angular-resouce" : {
+        "angular-resource" : {
           deps: ['angular']
         }
     },
     priority: [
-      "angular"
+      "angular","angular-resource","angular-route"
     ]
 });
 
