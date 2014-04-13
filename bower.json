@@ -2,6 +2,7 @@
 	"name" : "exdis.me blog",
 	"version" : "0.0.1",
 	"dependencies" : {
+		"bootstrap" : null,
 		"jquery" : null,
 		"requirejs" : null,
 		"angular" : null,

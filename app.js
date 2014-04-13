@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 var log = require('./server/log')(module);
 var config  = require('./server/config');
 var routes = require('./routes');
-var PostModel = require('./server/mongoose').PostModel;
+var TaskModel = require('./server/mongoose').TaskModel;
 var User = require('./server/mongoose').User;
 var api = require('./routes/api');
 var passport = require('passport');
@@ -59,7 +59,7 @@ app.use(function(err, req, res, next){
     return;
 });
 
-app.get('/', routes.index);
+app.get('/', isLoggedIn, routes.index);
 app.get('/login', function(req, res) {
     res.render('login', { message: req.flash('loginMessage') });
 });
@@ -117,7 +117,7 @@ function isLoggedIn(req, res, next) {
         return next();
 
     // if they aren't redirect them to the home page
-    res.redirect('/');
+    res.redirect('/login');
 }
 
 app.get('/admin',isLoggedIn, function(req, res) {
@@ -141,10 +141,10 @@ app.get('/api', function(req, res) {
 	res.send('API is running');
 });
 
-app.get('/api/posts', function(req, res) {
-    return PostModel.find(function (err, posts) {
+app.get('/api/tasks', function(req, res) {
+    return TaskModel.find(function (err, tasks) {
         if (!err) {
-            return res.send(posts);
+            return res.send(tasks);
         } else {
             res.statusCode = 500;
             log.error('Internal error(%d): %s',res.statusCode,err.message);
@@ -153,16 +153,16 @@ app.get('/api/posts', function(req, res) {
     });
 });
 
-app.post('/api/posts', isLoggedIn, function(req, res) {
-    var post = new PostModel({
+app.post('/api/tasks', isLoggedIn, function(req, res) {
+    var task = new TaskModel({
         title: req.body.title,
         content: req.body.content,
     });
 
-    post.save(function (err) {
+    task.save(function (err) {
         if (!err) {
-            log.info("post created");
-            return res.send({ status: 'OK', post:post });
+            log.info("task created");
+            return res.send({ status: 'OK', task:task });
         } else {
             console.log(err);
             if(err.name == 'ValidationError') {
@@ -177,14 +177,14 @@ app.post('/api/posts', isLoggedIn, function(req, res) {
     });
 });
 
-app.get('/api/posts/:id', function(req, res) {
-    return PostModel.findById(req.params.id, function (err, post) {
-        if(!post) {
+app.get('/api/tasks/:id', function(req, res) {
+    return TaskModel.findById(req.params.id, function (err, task) {
+        if(!task) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });
         }
         if (!err) {
-            return res.send({ status: 'OK', post:post });
+            return res.send({ status: 'OK', task:task });
         } else {
             res.statusCode = 500;
             log.error('Internal error(%d): %s',res.statusCode,err.message);
@@ -193,20 +193,20 @@ app.get('/api/posts/:id', function(req, res) {
     });
 });
 
-app.put('/api/posts/:id', function (req, res){
-    return PostModel.findById(req.params.id, function (err, post) {
-        if(!post) {
+app.put('/api/tasks/:id', function (req, res){
+    return TaskModel.findById(req.params.id, function (err, task) {
+        if(!task) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });
         }
 
-        post.title = req.body.title;
-        post.content = req.body.content;
-        post.modDate = new Date;
-        return post.save(function (err) {
+        task.title = req.body.title;
+        task.content = req.body.content;
+        task.modDate = new Date;
+        return task.save(function (err) {
             if (!err) {
-                log.info("post updated");
-                return res.send({ status: 'OK', post:post });
+                log.info("task updated");
+                return res.send({ status: 'OK', task:task });
             } else {
                 if(err.name == 'ValidationError') {
                     res.statusCode = 400;
@@ -221,15 +221,15 @@ app.put('/api/posts/:id', function (req, res){
     });
 });
 
-app.delete('/api/posts/:id', function (req, res){
-    return PostModel.findById(req.params.id, function (err, post) {
-        if(!post) {
+app.delete('/api/tasks/:id', function (req, res){
+    return TaskModel.findById(req.params.id, function (err, task) {
+        if(!task) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });
         }
-        return post.remove(function (err) {
+        return task.remove(function (err) {
             if (!err) {
-                log.info("post removed");
+                log.info("task removed");
                 return res.send({ status: 'OK' });
             } else {
                 res.statusCode = 500;

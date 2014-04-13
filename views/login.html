@@ -2,21 +2,45 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title></title>
+	<title>Tasks | Login</title>
 	<link href="stylesheets/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="javascripts/lib/bootstrap/dist/css/bootstrap.min.css">
+	<script src="javascripts/lib/jquery/dist/jquery.min.js"></script>
+	<script src="javascripts/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script>
+		$(function() {
+			$('ul.nav-pills li a').click(function() {
+				$('ul.nav-pills .active').removeClass('active');
+				$(this).parent('li').addClass('active');
+				if($(this).attr('href') == '#login') {
+					$('form.form-signin').attr('action','login/');
+					$('form.form-signin button[type=submit]').text('Sign in');
+				} else if($(this).attr('href') == '#register') {
+					$('form.form-signin').attr('action','register/');
+					$('form.form-signin button[type=submit]').text('Sign up');
+				}
+				return false;
+			});
+		});
+	</script>
 </head>
 <body>
-	<% if (message.length > 0) { %>
-		<div class="alert alert-danger"><%= message %></div>
-	<% } %>
-	<form action="/login" method="post">
-		<label for="">E-mail</label>
-		<input type="text" name="email">
-		<hr>
-		<label for="">Password</label>
-		<input type="password" name="password">
-		<button type="submit">Login</button>
-	</form>
+	<div class="container">
+		<div class="login-form">
+			<form class="form-signin" role="form" action="login/" method="post">
+				<% if (message.length > 0) { %>
+					<div class="alert alert-danger"><%= message %></div>
+				<% } %>
+				<ul class="nav nav-pills">
+					<li class="active"><a href="#login">Login</a></li>
+					<li><a href="#register">Register</a></li>
+				</ul>
+				<input type="email" class="form-control" placeholder="Email address" name="email" required autofocus>
+				<input type="password" class="form-control" placeholder="Password" name="password" required>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+			</form>
+		</div>
+    </div>
 </div>
 </body>
 </html>

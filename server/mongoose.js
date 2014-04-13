@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var log = require('./log')(module);
 var bcrypt = require('bcrypt-nodejs');
 
-mongoose.connect('mongodb://localhost/exdisme');
+mongoose.connect('mongodb://localhost/tasks');
 var db = mongoose.connection;
 
 db.on('error', function (err) {
@@ -15,16 +15,15 @@ db.once('open', function callback () {
 var Schema = mongoose.Schema;
 
 // Schemas
-var Post = new Schema({
-    title: { type: String, required: true },
-    content: { type: String, required: true },
-    pubDate: { type: Date, default: Date.now },
-    modDate: { type: Date, default: Date.now }
+var Task = new Schema({
+    link: { type: String, required: true },
+    time: { type: String, required: true },
+    pubDate: { type: Date, default: Date.now }
 });
 
-var PostModel = mongoose.model('Post', Post);
+var TaskModel = mongoose.model('Task', Task);
 
-module.exports.PostModel = PostModel;
+module.exports.TaskModel = TaskModel;
 
 var userSchema = mongoose.Schema({
 
