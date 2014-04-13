@@ -105,9 +105,61 @@ passport.use('local-login', new LocalStrategy({
 
 }));
 
+passport.use('local-signup', new LocalStrategy({
+    // by default, local strategy uses username and password, we will override with email
+    usernameField : 'email',
+    passwordField : 'password',
+    passReqToCallback : true // allows us to pass back the entire request to the callback
+},
+function(req, email, password, done) {
+
+    // asynchronous
+    // User.findOne wont fire unless data is sent back
+    process.nextTick(function() {
+
+    // find a user whose email is the same as the forms email
+    // we are checking to see if the user trying to login already exists
+    User.findOne({ 'email' :  email }, function(err, user) {
+        // if there are any errors, return the error
+        if (err)
+            return done(err);
+
+        // check to see if theres already a user with that email
+        if (user) {
+            return done(null, false, req.flash('loginMessage', 'That email is already taken.'));
+        } else {
+
+            // if there is no user with that email
+            // create the user
+            var newUser            = new User();
+
+            // set the user's local credentials
+            newUser.email    = email;
+            newUser.password = newUser.generateHash(password);
+
+            // save the user
+            newUser.save(function(err) {
+                if (err)
+                    throw err;
+                return done(null, newUser);
+            });
+        }
+
+    });    
+
+    });
+
+}));
+
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/admin', // redirect to the admin page
+    successRedirect : '/', // redirect to the admin page
     failureRedirect : '/login'
+}));
+
+app.post('/register', passport.authenticate('local-signup', {
+    successRedirect : '/', // redirect to the secure profile section
+    failureRedirect : '/login#register', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
 }));
 
 function isLoggedIn(req, res, next) {
