@@ -1,8 +1,17 @@
-<div ng-controller="ctrl">
-	<input type="text" ng-model="search.$">
+	<div class="table-responsive">
+		<table class="table table-striped table-hovered">
+			<tr>
+				<th>Task title</th>
+				<th>Task time</th>
+			</tr>
+			<tr ng-repeat="task in tasks">
+				<td><a href="{{task.link}}">{{task.title}}</a></td>
+				<td>{{task.time}}</td>
+			</tr>
+		</table>
+	</div>
 	<div class="post" ng-repeat="post in posts | orderBy: '-pubDate' | filter:search">
 		<a href="view/{{post._id}}"><h1>{{post.title}}</h1></a>
 		<span class="date">{{post.pubDate|parseDate}}</span>
 		<p>{{post.content}}</p>
 	</div>
-</div>

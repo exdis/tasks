@@ -208,7 +208,8 @@ app.get('/api/tasks', function(req, res) {
 app.post('/api/tasks', isLoggedIn, function(req, res) {
     var task = new TaskModel({
         title: req.body.title,
-        content: req.body.content,
+        link: req.body.link,
+        time: req.body.time
     });
 
     task.save(function (err) {
@@ -253,8 +254,8 @@ app.put('/api/tasks/:id', function (req, res){
         }
 
         task.title = req.body.title;
-        task.content = req.body.content;
-        task.modDate = new Date;
+        task.link = req.body.link;
+        task.time = req.body.time;
         return task.save(function (err) {
             if (!err) {
                 log.info("task updated");

@@ -1,20 +1,20 @@
-define(['angular', 'services'], function (angular, services) {
+define(['angular', 'services', 'jquery'], function (angular, services, $) {
 	'use strict';
 
 	/* Controllers */
 	
 	var ctrl = angular.module('app.controllers', ['app.services']);
-	ctrl.controller('ctrl', ['$scope', 'Posts', function ($scope, Posts) {
-		$scope.posts = Posts.get();
-	}]);
-	ctrl.controller('view', ['$scope', 'Posts', '$routeParams', function ($scope, Posts, $routeParams) {
-		$scope.data = Posts.getOne($routeParams.id);
-	}]);
-	ctrl.controller('admin', ['$scope', '$location', '$http', function ($scope, $location, $http) {
-		$scope.message = "Welcome!";
+	ctrl.controller('ctrl', ['$scope', 'Tasks', '$http', '$route', function ($scope, Tasks, $http, $route) {
+		$scope.tasks = Tasks.get();
 		$scope.submit = function() {
-			$http.post('api/posts', JSON.stringify($scope.form)).success(function(data) {
-				$location.path('/view/' + data.post._id);
+			$http.post('api/tasks', JSON.stringify($scope.form)).success(function(data) {
+				if(data.status === 'OK') {
+					$('#new').modal('hide');
+					if($('.navbar-collapse').hasClass('in')) {
+						$('.navbar-toggle').click();
+					}
+					$route.reload();
+				}
 			});
 		};
 	}]);

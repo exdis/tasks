@@ -2,7 +2,7 @@ requirejs.config({
 	baseUrl: "javascripts/lib",
     paths: {
       "app": "../app",
-      "bootstrap": "bootstrap/dist/js/bootstrap.min"
+      "bootstrap": "bootstrap/dist/js/bootstrap.min",
       "jquery": "jquery/dist/jquery.min",
       "angular": "angular/angular",
       "angular-route": "angular-route/angular-route",
@@ -17,7 +17,7 @@ requirejs.config({
     "shim": {
         "bootstrap" : {
           deps: ['jquery']
-        }
+        },
         "angular": {
         	exports: 'angular'
         },

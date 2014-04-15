@@ -4,8 +4,10 @@ define([
 	'services',
 	'directives',
 	'controllers',
+	'jquery',
+	'bootstrap',
 	'angular-route',
-	], function (angular, filters, services, directives, controllers) {
+	], function (angular, filters, services, directives, controllers, $) {
 		'use strict';
 
 	// Declare app level module which depends on filters, and services
