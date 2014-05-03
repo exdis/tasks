@@ -8,6 +8,15 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 		if(typeof $scope.currentUser !== 'undefined') {
 			$scope.tasks = Tasks.get($scope.currentUser);
 		}
+		$scope.total = function() {
+			var total = 0;
+			angular.forEach($scope.tasks, function(v,k) {
+				total += parseInt(v.time);
+			});
+			var d = moment.duration(total);
+			var out = d.get('hours') + 'hours ' + d.get('minutes') + 'minutes ' + d.get('seconds') + 'seconds';
+			return out;
+		};
 		$scope.submit = function() {
 			var form = $scope.form;
 			var h = form.time.match(/\d+h/);
