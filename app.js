@@ -193,8 +193,8 @@ app.get('/api', function(req, res) {
 	res.send('API is running');
 });
 
-app.get('/api/tasks', function(req, res) {
-    return TaskModel.find(function (err, tasks) {
+app.get('/api/tasks/:id', function(req, res) {
+    return TaskModel.find({userid:req.params.id}, function (err, tasks) {
         if (!err) {
             return res.send(tasks);
         } else {
@@ -208,6 +208,7 @@ app.get('/api/tasks', function(req, res) {
 app.post('/api/tasks', isLoggedIn, function(req, res) {
     var task = new TaskModel({
         title: req.body.title,
+        userid: req.body.userid,
         link: req.body.link,
         time: req.body.time
     });
@@ -229,7 +230,7 @@ app.post('/api/tasks', isLoggedIn, function(req, res) {
         }
     });
 });
-
+/*
 app.get('/api/tasks/:id', function(req, res) {
     return TaskModel.findById(req.params.id, function (err, task) {
         if(!task) {
@@ -245,7 +246,7 @@ app.get('/api/tasks/:id', function(req, res) {
         }
     });
 });
-
+*/
 app.put('/api/tasks/:id', isLoggedIn, function (req, res){
     return TaskModel.findById(req.params.id, function (err, task) {
         if(!task) {

@@ -9,7 +9,7 @@
 	<script data-main="javascripts/main" src="javascripts/lib/requirejs/require.js"></script>
 </head>
 <body>
-<div ng-controller="ctrl">
+<div ng-controller="ctrl" ng-init="currentUser = '<%= user %>'">
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">

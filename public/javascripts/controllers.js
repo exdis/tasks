@@ -5,8 +5,11 @@ define(['angular', 'services', 'jquery'], function (angular, services, $) {
 	
 	var ctrl = angular.module('app.controllers', ['app.services']);
 	ctrl.controller('ctrl', ['$scope', 'Tasks', '$http', '$route', function ($scope, Tasks, $http, $route) {
-		$scope.tasks = Tasks.get();
+		if(typeof $scope.currentUser !== 'undefined') {
+			$scope.tasks = Tasks.get($scope.currentUser);
+		}
 		$scope.submit = function() {
+			$scope.form.userid = $scope.currentUser;
 			$http.post('api/tasks', JSON.stringify($scope.form)).success(function(data) {
 				if(data.status === 'OK') {
 					$('#new').modal('hide');
@@ -18,7 +21,6 @@ define(['angular', 'services', 'jquery'], function (angular, services, $) {
 			});
 		};
 		$scope.taskDelete = function(id) {
-			console.log(id);
 			$http.delete('api/tasks/' + id);
 			if($('.navbar-collapse').hasClass('in')) {
 				$('.navbar-toggle').click();

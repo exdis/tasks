@@ -18,6 +18,7 @@ var Schema = mongoose.Schema;
 var Task = new Schema({
 	title: { type: String, required: true },
     link: { type: String, required: true },
+    userid: { type: String, required: true },
     time: { type: String, required: true },
     pubDate: { type: Date, default: Date.now }
 });
