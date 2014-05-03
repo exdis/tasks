@@ -7,7 +7,7 @@ define(['angular', 'services','moment'], function (angular, services, moment) {
 		.filter('parseTime', function() {
 			return function(input) {
 				var d = moment.duration(parseInt(input));
-				var out = d.get('hours') + 'h ' + d.get('minutes') + 'm ' + d.get('seconds') + 's';
+				var out = Math.floor(d.asHours()) + 'h ' + d.get('minutes') + 'm ' + d.get('seconds') + 's';
 				return out;
 			};
 	});

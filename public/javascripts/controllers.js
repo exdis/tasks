@@ -25,7 +25,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 				total += parseInt(v.time);
 			});
 			var d = moment.duration(total);
-			var out = d.get('hours') + 'hours ' + d.get('minutes') + 'minutes ' + d.get('seconds') + 'seconds';
+			var out = Math.floor(d.asHours()) + 'hours ' + d.get('minutes') + 'minutes ' + d.get('seconds') + 'seconds';
 			return out;
 		};
 		$scope.submit = function() {
@@ -53,6 +53,8 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 		};
 		$scope.taskDelete = function(id) {
 			$http.delete('api/tasks/' + id);
+			var index = $scope.tasks.indexOf(id);
+  			$scope.tasks.splice(index,1); 
 			if($('.navbar-collapse').hasClass('in')) {
 				$('.navbar-toggle').click();
 			}
