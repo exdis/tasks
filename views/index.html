@@ -9,7 +9,7 @@
 	<script data-main="javascripts/main" src="javascripts/lib/requirejs/require.js"></script>
 </head>
 <body>
-<div ng-controller="ctrl" ng-init="currentUser = '<%= user %>';init(1);">
+<div ng-controller="ctrl" ng-init="currentUser = '<%= id %>';init(1);">
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
@@ -29,12 +29,12 @@
                     <li><a href="#new" data-toggle="modal" data-target="#new">New task</a>
                     </li>
                 </ul>
-
                 <form class="navbar-form navbar-right" role="search">
                     <div class="form-group">
                         <input type="text" class="form-control" ng-model="search.$" placeholder="Filter tasks...">
                     </div>
                 </form>
+                <p class="navbar-text navbar-right"><%= email %></p>
             </div>
 
             <!-- /.navbar-collapse -->

@@ -4,5 +4,5 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { user: req.user._id });
+  res.render('index', { id: req.user._id, email: req.user.email });
 };
