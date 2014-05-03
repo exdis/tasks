@@ -7,13 +7,8 @@
 			</tr>
 			<tr ng-repeat="task in tasks">
 				<td><a href="{{task.link}}">{{task.title}}</a></td>
-				<td>{{task.time}}</td>
+				<td>{{task.time|parseTime}}</td>
 				<td><a href="#" ng-click="taskDelete(task._id)"><span class="glyphicon glyphicon-remove text-danger"></span></a></td>
 			</tr>
 		</table>
-	</div>
-	<div class="post" ng-repeat="post in posts | orderBy: '-pubDate' | filter:search">
-		<a href="view/{{post._id}}"><h1>{{post.title}}</h1></a>
-		<span class="date">{{post.pubDate|parseDate}}</span>
-		<p>{{post.content}}</p>
 	</div>

@@ -4,10 +4,12 @@ define(['angular', 'services','moment'], function (angular, services, moment) {
 	/* Filters */
   
 	angular.module('app.filters', ['app.services'])
-		.filter('parseDate', function() {
-			return function(date) {
-				var d = new Date(date);
-				return moment(d).format("DD.MM.YYYY");
+		.filter('parseTime', function() {
+			return function(input) {
+				var d = moment.duration(parseInt(input));
+				console.log(moment.duration(input, 'seconds'));
+				var out = d.get('hours') + 'h ' + d.get('minutes') + 'm ' + d.get('seconds') + 's';
+				return out;
 			};
 	});
 });

@@ -1,4 +1,4 @@
-define(['angular', 'services', 'jquery'], function (angular, services, $) {
+define(['angular', 'services', 'jquery', 'moment'], function (angular, services, $, moment) {
 	'use strict';
 
 	/* Controllers */
@@ -9,16 +9,26 @@ define(['angular', 'services', 'jquery'], function (angular, services, $) {
 			$scope.tasks = Tasks.get($scope.currentUser);
 		}
 		$scope.submit = function() {
-			$scope.form.userid = $scope.currentUser;
-			$http.post('api/tasks', JSON.stringify($scope.form)).success(function(data) {
-				if(data.status === 'OK') {
-					$('#new').modal('hide');
-					if($('.navbar-collapse').hasClass('in')) {
-						$('.navbar-toggle').click();
+			var form = $scope.form;
+			var time = moment(form.time,['H m s']);
+			if(time.isValid()) {
+				var duration = moment.duration({
+					hours: time.hour(),
+					minutes: time.minute(),
+					seconds: time.second()
+				});
+				form.time = duration.asMilliseconds();
+				form.userid = $scope.currentUser;
+				$http.post('api/tasks', JSON.stringify(form)).success(function(data) {
+					if(data.status === 'OK') {
+						$('#new').modal('hide');
+						if($('.navbar-collapse').hasClass('in')) {
+							$('.navbar-toggle').click();
+						}
+						$route.reload();
 					}
-					$route.reload();
-				}
-			});
+				});
+			}
 		};
 		$scope.taskDelete = function(id) {
 			$http.delete('api/tasks/' + id);
