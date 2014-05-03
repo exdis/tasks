@@ -17,5 +17,13 @@ define(['angular', 'services', 'jquery'], function (angular, services, $) {
 				}
 			});
 		};
+		$scope.taskDelete = function(id) {
+			console.log(id);
+			$http.delete('api/tasks/' + id);
+			if($('.navbar-collapse').hasClass('in')) {
+				$('.navbar-toggle').click();
+			}
+			$route.reload();
+		};
 	}]);
 });

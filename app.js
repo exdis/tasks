@@ -246,7 +246,7 @@ app.get('/api/tasks/:id', function(req, res) {
     });
 });
 
-app.put('/api/tasks/:id', function (req, res){
+app.put('/api/tasks/:id', isLoggedIn, function (req, res){
     return TaskModel.findById(req.params.id, function (err, task) {
         if(!task) {
             res.statusCode = 404;
@@ -274,7 +274,7 @@ app.put('/api/tasks/:id', function (req, res){
     });
 });
 
-app.delete('/api/tasks/:id', function (req, res){
+app.delete('/api/tasks/:id', isLoggedIn, function (req, res){
     return TaskModel.findById(req.params.id, function (err, task) {
         if(!task) {
             res.statusCode = 404;

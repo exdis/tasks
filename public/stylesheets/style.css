@@ -207,3 +207,8 @@ body {
     padding: 15px;
   }
 }
+/* line 173, ../sass/screen.scss */
+table td:last-child, table th:last-child {
+  width: 20px;
+  text-align: center;
+}
