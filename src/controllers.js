@@ -46,7 +46,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 					if($('.navbar-collapse').hasClass('in')) {
 						$('.navbar-toggle').click();
 					}
-					$route.reload();
+					$scope.init($scope.pagination.cur);
 					$scope.form = {};
 				}
 			});
@@ -56,7 +56,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 			if($('.navbar-collapse').hasClass('in')) {
 				$('.navbar-toggle').click();
 			}
-			$route.reload();
+			$scope.init($scope.pagination.cur);
 		};
 	}]);
 });
