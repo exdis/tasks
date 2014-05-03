@@ -5,12 +5,10 @@ define(['angular', 'angular-resource'], function (angular) {
 
 	var services = angular.module('app.services', ['ngResource']);
 	services.factory('Tasks', function($resource) {
-		var res = $resource('api/tasks/:id',{},{
-			get: {method: 'GET', isArray:true, params: {id: 0}},
-		});
-		return {
-			get : function(id) {return res.get({id:id});},
-		};
+		var res = $resource('api/tasks/:id/:page',{},{
+				get: {method: 'GET', isArray:false, params: {id: 0,page: 0}},
+			});
+		return res;
 	});
 
 	return services;

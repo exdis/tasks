@@ -193,10 +193,19 @@ app.get('/api', function(req, res) {
 	res.send('API is running');
 });
 
-app.get('/api/tasks/:id', function(req, res) {
-    return TaskModel.find({userid:req.params.id}, function (err, tasks) {
+app.get('/api/tasks/:id/:page', function(req, res) {
+    var count;
+    TaskModel.count({userid:req.params.id},function(err,c){
+        count = c;
+    });
+    return TaskModel.find({userid:req.params.id},null,{skip:(req.params.page-1) * 20}, function (err, tasks) {
         if (!err) {
-            return res.send(tasks);
+            var out = {
+                count : count,
+                tasks : tasks
+            }
+            console.log(out);
+            return res.send(out);
         } else {
             res.statusCode = 500;
             log.error('Internal error(%d): %s',res.statusCode,err.message);

@@ -5,9 +5,20 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 	
 	var ctrl = angular.module('app.controllers', ['app.services']);
 	ctrl.controller('ctrl', ['$scope', 'Tasks', '$http', '$route', function ($scope, Tasks, $http, $route) {
-		if(typeof $scope.currentUser !== 'undefined') {
-			$scope.tasks = Tasks.get($scope.currentUser);
-		}
+		$scope.init = function(page) {
+			if(typeof $scope.currentUser !== 'undefined') {
+				Tasks.get({id:$scope.currentUser,page:page}, function(data) {
+					$scope.count = data.count;
+					$scope.tasks = data.tasks;
+					$scope.pageTotal = Math.ceil(parseInt($scope.count) / 20);
+					$scope.pagination = {
+						cur: page,
+						total: $scope.pageTotal,
+						display: 10
+					};
+				});
+			}
+		};
 		$scope.total = function() {
 			var total = 0;
 			angular.forEach($scope.tasks, function(v,k) {
@@ -22,7 +33,6 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 			var h = form.time.match(/\d+h/);
 			var m = form.time.match(/\d+m/);
 			var s = form.time.match(/\d+s/);
-			console.log(h);
 			var duration = moment.duration({
 				hours: h ? parseInt(h[0].replace('h','')) : 0,
 				minutes: m ? parseInt(m[0].replace('m','')) : 0,
