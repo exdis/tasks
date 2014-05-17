@@ -196,7 +196,13 @@ app.get('/api', function(req, res) {
 app.get('/api/tasks/:id/:page', function(req, res) {
     var count;
     TaskModel.count({userid:req.params.id},function(err,c){
-        count = c;
+        if(!err) {
+            count = c;
+        } else {
+            res.statusCode = 500;
+            log.error('Internal error(%d): %s',res.statusCode,err.message);
+            return res.send({ error: 'Server error' });
+        }
     });
     return TaskModel.find({userid:req.params.id},null,{skip:(req.params.page-1) * 20}, function (err, tasks) {
         if (!err) {
