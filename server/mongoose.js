@@ -31,6 +31,7 @@ var userSchema = mongoose.Schema({
 
     email        : String,
     password     : String,
+    cost : { type: Number, default: 0 }
 
 });
 

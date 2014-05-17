@@ -303,6 +303,32 @@ app.delete('/api/tasks/:id', isLoggedIn, function (req, res){
     });
 });
 
+app.put('/api/users/:id', isLoggedIn, function(req, res) {
+    return User.findById(req.params.id, function (err, user) {
+        if(!user) {
+            res.statusCode = 404;
+            return res.send({ error: 'Not found' });
+        }
+
+        user.cost = req.body.cost;
+        return user.save(function (err) {
+            if (!err) {
+                log.info("user updated");
+                return res.send({ status: 'OK', user:user });
+            } else {
+                if(err.name == 'ValidationError') {
+                    res.statusCode = 400;
+                    res.send({ error: 'Validation error' });
+                } else {
+                    res.statusCode = 500;
+                    res.send({ error: 'Server error' });
+                }
+                log.error('Internal error(%d): %s',res.statusCode,err.message);
+            }
+        });
+    });
+});
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

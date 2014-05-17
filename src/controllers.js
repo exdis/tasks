@@ -19,13 +19,18 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 				});
 			}
 		};
-		$scope.total = function() {
+		$scope.total = function(rubles) {
 			var total = 0;
 			angular.forEach($scope.tasks, function(v,k) {
 				total += parseInt(v.time);
 			});
 			var d = moment.duration(total);
-			var out = Math.floor(d.asHours()) + 'hours ' + d.get('minutes') + 'minutes ' + d.get('seconds') + 'seconds';
+			var out;
+			if(!rubles) {
+				out = Math.floor(d.asHours()) + 'hours ' + d.get('minutes') + 'minutes ' + d.get('seconds') + 'seconds';
+			} else {
+				out = d.asHours() * $scope.settings.cost;
+			}
 			return out;
 		};
 		$scope.submit = function() {
@@ -48,6 +53,17 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 					}
 					$scope.init($scope.pagination.cur);
 					$scope.form = {};
+				}
+			});
+		};
+		$scope.submitSettings = function() {
+			var settings = $scope.settings;
+			$http.put('api/users/' + $scope.currentUser, JSON.stringify(settings)).success(function(data) {
+				if(data.status === 'OK') {
+					$('#settings').modal('hide');
+					if($('.navbar-collapse').hasClass('in')) {
+						$('.navbar-toggle').click();
+					}
 				}
 			});
 		};

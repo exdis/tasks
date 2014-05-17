@@ -10,7 +10,7 @@
 	<script data-main="javascripts/main" src="javascripts/lib/requirejs/require.js"></script>
 </head>
 <body>
-<div ng-controller="ctrl" ng-init="currentUser = '<%= id %>';init(1);">
+<div ng-controller="ctrl" ng-init="currentUser = '<%= id %>';settings.cost = <%= cost %>;init(1);">
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
@@ -28,7 +28,6 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="#new" data-toggle="modal" data-target="#new">New task</a>
-                    <li><a href="/logout" target="_self">Logout</a>
                     </li>
                 </ul>
                 <form class="navbar-form navbar-right" role="search">
@@ -40,7 +39,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= email %></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#settings" data-toggle="modal" data-target="#settings">settings</a>
+                            <li><a href="#settings" data-toggle="modal" data-target="#settings">Settings</a>
                             <li><a href="/logout" target="_self">Logout</a>    
                         </ul>
                     </li>
@@ -88,6 +87,29 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" ng-click="submit()">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <div class="modal fade" id="settings" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Settings</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Hour cost (rubles)</label>
+                                <input type="text" class="form-control" ng-model="settings.cost" placeholder="Hour cost">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="submitSettings()">Save changes</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
