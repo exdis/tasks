@@ -202,3 +202,8 @@ table td:last-child, table th:last-child {
   width: 20px;
   text-align: center;
 }
+
+/* line 180, ../sass/screen.scss */
+.loading {
+  text-align: center;
+}

@@ -6,6 +6,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 	var ctrl = angular.module('app.controllers', ['app.services']);
 	ctrl.controller('ctrl', ['$scope', 'Tasks', '$http', '$route', function ($scope, Tasks, $http, $route) {
 		$scope.init = function(page) {
+			$scope.loading = true;
 			if(typeof $scope.currentUser !== 'undefined') {
 				Tasks.get({id:$scope.currentUser,page:page}, function(data) {
 					$scope.count = data.count;
@@ -16,6 +17,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 						total: $scope.pageTotal,
 						display: 10
 					};
+					$scope.loading = false;
 				});
 			}
 		};
