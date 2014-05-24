@@ -10,6 +10,13 @@ define(['angular', 'angular-resource'], function (angular) {
 			});
 		return res;
 	});
+	services.factory('TasksDate', function($resource) {
+		var date = new Date();
+		var res = $resource('api/tasks/date/:id/:year/:month',{},{
+				get: {method: 'GET', isArray:true, params: {id: 0,year: date.getFullYear(),month: date.getMonth()}},
+			});
+		return res;
+	});
 
 	return services;
 

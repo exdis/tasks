@@ -220,6 +220,26 @@ app.get('/api/tasks/:id/:page', function(req, res) {
     });
 });
 
+app.get('/api/tasks/date/:id/:year/:month', function(req, res) {
+    var year = req.params.year;
+    var month = req.params.month;
+    var minmonth = year + ' ' + parseInt(month);
+    var maxmonth = year + ' ' + (parseInt(month) + 1);
+    console.log(maxmonth);
+    return TaskModel.find({userid:req.params.id,pubDate: {
+        "$gte": new Date(minmonth),
+        "$lt": new Date(maxmonth)
+    }}, function (err, tasks) {
+        if (!err) {
+            return res.send(tasks);
+        } else {
+            res.statusCode = 500;
+            log.error('Internal error(%d): %s',res.statusCode,err.message);
+            return res.send({ error: 'Server error' });
+        }
+    });
+});
+
 app.post('/api/tasks', isLoggedIn, function(req, res) {
     var task = new TaskModel({
         title: req.body.title,

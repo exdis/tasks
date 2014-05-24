@@ -12,7 +12,7 @@
 <body>
 <div ng-controller="ctrl" ng-init="loading = true;currentUser = '<%= id %>';settings.cost = <%= cost %>;init(1);">
 
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-click="getDatedTasks(4)">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">

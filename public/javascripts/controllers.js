@@ -4,35 +4,51 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 	/* Controllers */
 	
 	var ctrl = angular.module('app.controllers', ['app.services']);
-	ctrl.controller('ctrl', ['$scope', 'Tasks', '$http', '$route', function ($scope, Tasks, $http, $route) {
-		$scope.init = function(page) {
+	ctrl.controller('ctrl', ['$scope', 'Tasks', 'TasksDate', '$http', '$route', function ($scope, Tasks, TasksDate, $http, $route) {
+		$scope.init = function(page,load) {
+			$scope.page = page;
 			if(typeof $scope.currentUser !== 'undefined') {
-				Tasks.get({id:$scope.currentUser,page:page}, function(data) {
-					$scope.count = data.count;
-					$scope.tasks = data.tasks;
-					$scope.pageTotal = Math.ceil(parseInt($scope.count) / 20);
-					$scope.pagination = {
-						cur: page,
-						total: $scope.pageTotal,
-						display: 10
-					};
-					$scope.loading = false;
+				if(typeof $scope.month === 'undefined' || $scope.month < 0) {
+					$scope.month = moment().get('month');
+				}
+				if(typeof load === 'undefined') {
+					Tasks.get({id:$scope.currentUser,page:page}, function(data) {
+						$scope.count = data.count;
+						$scope.tasks = data.tasks;
+						$scope.pageTotal = Math.ceil(parseInt($scope.count) / 20);
+						$scope.pagination = {
+							cur: page,
+							total: $scope.pageTotal,
+							display: 10
+						};
+						$scope.loading = false;
+					});
+				}
+				TasksDate.get({id:$scope.currentUser,year:moment().get('year'),month:$scope.month+1}, function(data) {
+					$scope.datedTasks = data;
+					$scope.total($scope.month);
 				});
 			}
 		};
-		$scope.total = function(rubles) {
+		$scope.total = function(month) {
 			var total = 0;
-			angular.forEach($scope.tasks, function(v,k) {
+			angular.forEach($scope.datedTasks, function(v,k) {
 				total += parseInt(v.time);
 			});
 			var d = moment.duration(total);
 			var out;
-			if(!rubles) {
-				out = Math.floor(d.asHours()) + 'hours ' + d.get('minutes') + 'minutes ' + d.get('seconds') + 'seconds';
-			} else {
-				out = d.asHours() * $scope.settings.cost;
-			}
-			return out;
+			out = 'In ' + moment(moment().get('year') + ' ' + (month + 1)).format('MMMM') + ' you have ';
+			out += Math.floor(d.asHours()) + 'hours ' + d.get('minutes') + 'minutes ' + d.get('seconds') + 'seconds';
+			out += ' (' + d.asHours() * $scope.settings.cost + ' rubles)';
+			$scope.timeEntries = out;
+		};
+		$scope.prevMonth = function() {
+			$scope.month -= 1;
+			$scope.init($scope.page,true);
+		};
+		$scope.currentMonth = function() {
+			$scope.month = moment().get('month');
+			$scope.init($scope.page,true);
 		};
 		$scope.submit = function() {
 			var form = $scope.form;
@@ -65,6 +81,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 					if($('.navbar-collapse').hasClass('in')) {
 						$('.navbar-toggle').click();
 					}
+					$scope.total($scope.month);
 				}
 			});
 		};
