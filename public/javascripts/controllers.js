@@ -52,26 +52,54 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 		};
 		$scope.submit = function() {
 			var form = $scope.form;
-			var h = form.time.match(/\d+h/);
-			var m = form.time.match(/\d+m/);
-			var s = form.time.match(/\d+s/);
-			var duration = moment.duration({
-				hours: h ? parseInt(h[0].replace('h','')) : 0,
-				minutes: m ? parseInt(m[0].replace('m','')) : 0,
-				seconds: s ? parseInt(s[0].replace('s','')) : 0
-			});
-			form.time = duration.asMilliseconds();
-			form.userid = $scope.currentUser;
-			$http.post('api/tasks', JSON.stringify(form)).success(function(data) {
-				if(data.status === 'OK') {
-					$('#new').modal('hide');
-					if($('.navbar-collapse').hasClass('in')) {
-						$('.navbar-toggle').click();
-					}
-					$scope.init($scope.pagination.cur);
-					$scope.form = {};
-				}
-			});
+			var validation = [false,false,false];
+            
+			$('#new form input').each(function(i) {
+                if(!$(this).val()) {
+                    $(this).parent('.form-group').addClass('has-error');
+                    validation[i] = false;
+                } else {
+                    if($(this).hasClass('time')) {
+                        var val = $(this).val();
+                        if(val.match(/\d+[hms]/)) {
+                            $(this).parent('.form-group').removeClass('has-error');
+                            validation[i] = true;      
+                        }        
+                    } else {
+                        $(this).parent('.form-group').removeClass('has-error');
+                        validation[i] = true;
+                    }
+                }
+            });
+            var go = true;
+            for (var i = 0; i < validation.length; i++) {
+                if(!validation[i]) {
+                    go = false;
+                }
+            }
+ 
+            if(go) {
+                var h = form.time.match(/\d+h/);
+                var m = form.time.match(/\d+m/);
+                var s = form.time.match(/\d+s/);
+                var duration = moment.duration({
+                    hours: h ? parseInt(h[0].replace('h','')) : 0,
+                    minutes: m ? parseInt(m[0].replace('m','')) : 0,
+                    seconds: s ? parseInt(s[0].replace('s','')) : 0
+                });
+                form.time = duration.asMilliseconds();
+                form.userid = $scope.currentUser;
+                $http.post('api/tasks', JSON.stringify(form)).success(function(data) {
+                    if(data.status === 'OK') {
+                        $('#new').modal('hide');
+                        if($('.navbar-collapse').hasClass('in')) {
+                            $('.navbar-toggle').click();
+                        }
+                        $scope.init($scope.pagination.cur);
+                        $scope.form = {};
+                    }
+                });
+            }
 		};
 		$scope.submitSettings = function() {
 			var settings = $scope.settings;
