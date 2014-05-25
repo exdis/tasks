@@ -37,7 +37,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 			});
 			var d = moment.duration(total);
 			var out;
-			out = 'In ' + moment(moment().get('year') + ' ' + (month + 1)).format('MMMM') + ' you have ';
+			out = 'In ' + moment({year:moment().get('year'),month:month}).format('MMMM') + ' you have ';
 			out += Math.floor(d.asHours()) + 'hours ' + d.get('minutes') + 'minutes ' + d.get('seconds') + 'seconds';
 			out += ' (' + d.asHours() * $scope.settings.cost + ' rubles)';
 			$scope.timeEntries = out;
