@@ -103,15 +103,27 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 		};
 		$scope.submitSettings = function() {
 			var settings = $scope.settings;
-			$http.put('api/users/' + $scope.currentUser, JSON.stringify(settings)).success(function(data) {
-				if(data.status === 'OK') {
-					$('#settings').modal('hide');
-					if($('.navbar-collapse').hasClass('in')) {
-						$('.navbar-toggle').click();
-					}
-					$scope.total($scope.month);
-				}
-			});
+
+            var go = true;
+            $('#settings form input').each(function(i) {
+                if(!$(this).val()) {
+                    go = false;
+                    $(this).parent('.form-group').addClass('has-error');
+                } else {
+                    $(this).parent('.form-group').removeClass('has-error');
+                }
+            });
+            if(go) {
+    			$http.put('api/users/' + $scope.currentUser, JSON.stringify(settings)).success(function(data) {
+    				if(data.status === 'OK') {
+    					$('#settings').modal('hide');
+    					if($('.navbar-collapse').hasClass('in')) {
+    						$('.navbar-toggle').click();
+    					}
+    					$scope.total($scope.month);
+    				}
+    			});
+            }
 		};
 		$scope.taskDelete = function() {
 			console.log($scope.tasktoremove);
