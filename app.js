@@ -204,7 +204,7 @@ app.get('/api/tasks/:id/:page', function(req, res) {
             return res.send({ error: 'Server error' });
         }
     });
-    return TaskModel.find({userid:req.params.id},null,{skip:(req.params.page-1) * 20,sort:{pubDate:1}}, function (err, tasks) {
+    return TaskModel.find({userid:req.params.id},null,{skip:(req.params.page-1) * 20,sort:{pubDate:-1},limit:20}, function (err, tasks) {
         if (!err) {
             var out = {
                 count : count,
