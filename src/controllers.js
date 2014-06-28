@@ -133,14 +133,15 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 		$scope.taskDelete = function() {
 			console.log($scope.tasktoremove);
 			var id = (typeof $scope.tasktoremove !== 'undefined') ? $scope.tasktoremove : '';
-			$http.delete('api/tasks/' + id);
-			var index = $scope.tasks.indexOf(id);
-  			$scope.tasks.splice(index,1); 
-  			$('#confirm').modal('hide');
-			if($('.navbar-collapse').hasClass('in')) {
-				$('.navbar-toggle').click();
-			}
-			$scope.init($scope.pagination.cur);
+			$http.delete('api/tasks/' + id).success(function() {
+                $('#confirm').modal('hide');
+                if($('.navbar-collapse').hasClass('in')) {
+                    $('.navbar-toggle').click();
+                }
+                $scope.init($scope.pagination.cur);
+            });
+			//var index = $scope.tasks.indexOf(id);
+  			//$scope.tasks.splice(index,1); 
 		};
         $scope.ctrlEnter = function(e,func) {
             if(e.keyCode === 13 && e.ctrlKey) {
