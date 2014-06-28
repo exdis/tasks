@@ -20,7 +20,7 @@ body {
   margin: 0 auto;
 }
 
-/* line 25, ../sass/screen.scss */
+/* line 24, ../sass/screen.scss */
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
   margin-bottom: 10px;
@@ -115,7 +115,7 @@ body {
   text-decoration: none;
 }
 
-/* line 102, ../sass/screen.scss */
+/* line 101, ../sass/screen.scss */
 .sidebar-nav li a:active,
 .sidebar-nav li a:focus {
   text-decoration: none;
