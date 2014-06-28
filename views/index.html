@@ -73,15 +73,15 @@
                         <form role="form">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Task title</label>
-                                <input type="text" ng-keyup="($event.keyCode == 13 && $event.ctrlKey) ? submit() : null" class="title form-control" ng-model="form.title" placeholder="Enter task title">
+                                <input type="text" ng-keyup="ctrlEnter($event,submit)" class="title form-control" ng-model="form.title" placeholder="Enter task title">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Link to task</label>
-                                <input type="text" ng-keyup="($event.keyCode == 13 && $event.ctrlKey) ? submit() : null" class="link form-control" ng-model="form.link" placeholder="Enter link to task">
+                                <input type="text" ng-keyup="ctrlEnter($event,submit)" class="link form-control" ng-model="form.link" placeholder="Enter link to task">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Task time</label>
-                                <input type="text" ng-keyup="($event.keyCode == 13 && $event.ctrlKey) ? submit() : null" class="time form-control" ng-model="form.time" placeholder="Enter task time">
+                                <input type="text" ng-keyup="ctrlEnter($event,submit)" class="time form-control" ng-model="form.time" placeholder="Enter task time">
                             </div>
                         </form>
                     </div>

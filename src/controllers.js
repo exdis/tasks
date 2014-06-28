@@ -4,7 +4,12 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 	/* Controllers */
 	
 	var ctrl = angular.module('app.controllers', ['app.services']);
-	ctrl.controller('ctrl', ['$scope', 'Tasks', 'TasksDate', '$http', '$route', function ($scope, Tasks, TasksDate, $http, $route) {
+	ctrl.controller('ctrl', ['$scope', 'Tasks', 'TasksDate', '$http', '$route', '$document', function ($scope, Tasks, TasksDate, $http, $route, $document) {
+        $document.bind('keypress', function(event) {
+            if(event.keyCode === 110) {
+                $('#new').modal('show');
+            }
+        });
 		$scope.init = function(page,load) {
 			$scope.page = page;
 			if(typeof $scope.currentUser !== 'undefined') {
@@ -137,5 +142,10 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
 			}
 			$scope.init($scope.pagination.cur);
 		};
+        $scope.ctrlEnter = function(e,func) {
+            if(e.keyCode === 13 && e.ctrlKey) {
+                func();
+            }
+        };
 	}]);
 });
