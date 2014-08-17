@@ -45,316 +45,326 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.use(function(req, res, next){
-    res.status(404);
-    log.debug('Not found URL: %s',req.url);
-    res.send({ error: 'Not found' });
-    return;
+app.use(function(req, res, next) {
+  res.status(404);
+  log.debug('Not found URL: %s', req.url);
+  res.send({ error: 'Not found' });
+  return;
 });
 
-app.use(function(err, req, res, next){
-    res.status(err.status || 500);
-    log.error('Internal error(%d): %s',res.statusCode,err.message);
-    res.send({ error: err.message });
-    return;
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  log.error('Internal error(%d): %s', res.statusCode, err.message);
+  res.send({ error: err.message });
+  return;
 });
 
 app.get('/', isLoggedIn, routes.index);
 app.get('/login', function(req, res) {
-    res.render('login', { message: req.flash('loginMessage') });
+  res.render('login', { message: req.flash('loginMessage') });
 });
 
 var LocalStrategy = require('passport-local').Strategy;
 
 passport.serializeUser(function(user, done) {
-    done(null, user.id);
+  done(null, user.id);
 });
 
 // used to deserialize the user
 passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-        done(err, user);
-    });
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
 });
 
 passport.use('local-login', new LocalStrategy({
-    // by default, local strategy uses username and password, we will override with email
-    usernameField : 'email',
-    passwordField : 'password',
-    passReqToCallback : true // allows us to pass back the entire request to the callback
-},function(req, email, password, done) { // callback with email and password from our form
+  // by default, local strategy uses username and password, we will override with email
+  usernameField : 'email',
+  passwordField : 'password',
+  passReqToCallback : true // allows us to pass back the entire request to the callback
+}, function(req, email, password, done) { // callback with email and password from our form
 
-    // find a user whose email is the same as the forms email
-    // we are checking to see if the user trying to login already exists
-    User.findOne({ 'email' :  email }, function(err, user) {
-        // if there are any errors, return the error before anything else
-        if (err)
-            return done(err);
+  // find a user whose email is the same as the forms email
+  // we are checking to see if the user trying to login already exists
+  User.findOne({ 'email' :  email }, function(err, user) {
+    // if there are any errors, return the error before anything else
+    if (err) {
+      return done(err);
+    }
 
-        // if no user is found, return the message
-        if (!user)
-            return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+    // if no user is found, return the message
+    if (!user) {
+      return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+    }
 
-        // if the user is found but the password is wrong
-        if (!user.validPassword(password))
-            return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+    // if the user is found but the password is wrong
+    if (!user.validPassword(password)) {
+      return done(null, false, req.flash('loginMessage',
+      'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+    }
 
-        // all is well, return successful user
-        return done(null, user);
-    });
+    // all is well, return successful user
+    return done(null, user);
+  });
 
 }));
 
 passport.use('local-signup', new LocalStrategy({
-    // by default, local strategy uses username and password, we will override with email
-    usernameField : 'email',
-    passwordField : 'password',
-    passReqToCallback : true // allows us to pass back the entire request to the callback
+  // by default, local strategy uses username and password, we will override with email
+  usernameField : 'email',
+  passwordField : 'password',
+  passReqToCallback : true // allows us to pass back the entire request to the callback
 },
 function(req, email, password, done) {
 
-    // asynchronous
-    // User.findOne wont fire unless data is sent back
-    process.nextTick(function() {
+  // asynchronous
+  // User.findOne wont fire unless data is sent back
+  process.nextTick(function() {
 
-    // find a user whose email is the same as the forms email
-    // we are checking to see if the user trying to login already exists
+  // find a user whose email is the same as the forms email
+  // we are checking to see if the user trying to login already exists
     User.findOne({ 'email' :  email }, function(err, user) {
-        // if there are any errors, return the error
-        if (err)
-            return done(err);
+    // if there are any errors, return the error
+      if (err) {
+        return done(err);
+      }
 
-        // check to see if theres already a user with that email
-        if (user) {
-            return done(null, false, req.flash('loginMessage', 'That email is already taken.'));
-        } else {
+    // check to see if theres already a user with that email
+      if (user) {
+        return done(null, false, req.flash('loginMessage',
+        'That email is already taken.'));
+      } else {
 
-            // if there is no user with that email
-            // create the user
-            var newUser            = new User();
+        // if there is no user with that email
+        // create the user
+        var newUser            = new User();
 
-            // set the user's local credentials
-            newUser.email    = email;
-            newUser.password = newUser.generateHash(password);
+        // set the user's local credentials
+        newUser.email    = email;
+        newUser.password = newUser.generateHash(password);
 
-            // save the user
-            newUser.save(function(err) {
-                if (err)
-                    throw err;
-                return done(null, newUser);
-            });
-        }
-
-    });    
+        // save the user
+        newUser.save(function(err) {
+          if (err) {
+            throw err;
+          }
+          return done(null, newUser);
+        });
+      }
 
     });
+
+  });
 
 }));
 
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/', // redirect to the admin page
-    failureRedirect : '/login'
+  successRedirect : '/', // redirect to the admin page
+  failureRedirect : '/login'
 }));
 
 app.post('/register', passport.authenticate('local-signup', {
-    successRedirect : '/', // redirect to the secure profile section
-    failureRedirect : '/login#register', // redirect back to the signup page if there is an error
-    failureFlash : true // allow flash messages
+  successRedirect : '/', // redirect to the secure profile section
+  failureRedirect : '/login#register', // redirect back to the signup page if there is an error
+  failureFlash : true // allow flash messages
 }));
 
 function isLoggedIn(req, res, next) {
 
-    // if user is authenticated in the session, carry on 
-    if (req.isAuthenticated())
-        return next();
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated()) {
+    return next();
+  }
 
-    // if they aren't redirect them to the home page
-    res.redirect('/login');
+  // if they aren't redirect them to the home page
+  res.redirect('/login');
 }
 
-app.get('/admin',isLoggedIn, function(req, res) {
-    res.render('index');
+app.get('/admin', isLoggedIn, function(req, res) {
+  res.render('index');
 });
 
-app.get('/admin/*',isLoggedIn, function(req, res) {
-    res.render('index');
+app.get('/admin/*', isLoggedIn, function(req, res) {
+  res.render('index');
 });
 
 app.get('/view/*', function(req, res) {
-    res.render('index');
+  res.render('index');
 });
 
-app.get('/logout', function(req, res){
+app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
 
 app.get('/api', function(req, res) {
-	res.send('API is running');
+  res.send('API is running');
 });
 
 app.get('/api/tasks/:id/:page', function(req, res) {
-    var count;
-    TaskModel.count({userid:req.params.id},function(err,c){
-        if(!err) {
-            count = c;
-        } else {
-            res.statusCode = 500;
-            log.error('Internal error(%d): %s',res.statusCode,err.message);
-            return res.send({ error: 'Server error' });
-        }
-    });
-    return TaskModel.find({userid:req.params.id},null,{skip:(req.params.page-1) * 20,sort:{pubDate:-1},limit:20}, function (err, tasks) {
-        if (!err) {
-            var out = {
-                count : count,
-                tasks : tasks
-            }
-            console.log(out);
-            return res.send(out);
-        } else {
-            res.statusCode = 500;
-            log.error('Internal error(%d): %s',res.statusCode,err.message);
-            return res.send({ error: 'Server error' });
-        }
-    });
+  var count;
+  TaskModel.count({userid : req.params.id}, function(err, c) {
+    if (!err) {
+      count = c;
+    } else {
+      res.statusCode = 500;
+      log.error('Internal error(%d): %s', res.statusCode, err.message);
+      return res.send({ error: 'Server error' });
+    }
+  });
+  return TaskModel.find({userid : req.params.id}, null,
+  {skip: (req.params.page - 1) * 20, sort :
+  {pubDate : -1}, limit : 20}, function (err, tasks) {
+    if (!err) {
+      var out = {
+        count : count,
+        tasks : tasks
+      }
+      console.log(out);
+      return res.send(out);
+    } else {
+      res.statusCode = 500;
+      log.error('Internal error(%d): %s', res.statusCode, err.message);
+      return res.send({ error: 'Server error' });
+    }
+  });
 });
 
 app.get('/api/tasks/date/:id/:year/:month', function(req, res) {
-    var year = req.params.year;
-    var month = req.params.month;
-    var minmonth = year + ' ' + parseInt(month);
-    var maxmonth = year + ' ' + (parseInt(month) + 1);
-    console.log(maxmonth);
-    return TaskModel.find({userid:req.params.id,pubDate: {
-        "$gte": new Date(minmonth),
-        "$lt": new Date(maxmonth)
-    }}, function (err, tasks) {
-        if (!err) {
-            return res.send(tasks);
-        } else {
-            res.statusCode = 500;
-            log.error('Internal error(%d): %s',res.statusCode,err.message);
-            return res.send({ error: 'Server error' });
-        }
-    });
+  var year = req.params.year;
+  var month = req.params.month;
+  var minmonth = year + ' ' + parseInt(month);
+  var maxmonth = year + ' ' + (parseInt(month) + 1);
+  console.log(maxmonth);
+  return TaskModel.find({userid : req.params.id, pubDate: {
+    '$gte': new Date(minmonth),
+    '$lt': new Date(maxmonth)
+  }}, function (err, tasks) {
+    if (!err) {
+      return res.send(tasks);
+    } else {
+      res.statusCode = 500;
+      log.error('Internal error(%d): %s', res.statusCode, err.message);
+      return res.send({ error: 'Server error' });
+    }
+  });
 });
 
 app.post('/api/tasks', isLoggedIn, function(req, res) {
-    var task = new TaskModel({
-        title: req.body.title,
-        userid: req.body.userid,
-        link: req.body.link,
-        time: req.body.time
-    });
+  var task = new TaskModel({
+    title: req.body.title,
+    userid: req.body.userid,
+    link: req.body.link,
+    time: req.body.time
+  });
 
-    task.save(function (err) {
-        if (!err) {
-            log.info("task created");
-            return res.send({ status: 'OK', task:task });
-        } else {
-            console.log(err);
-            if(err.name == 'ValidationError') {
-                res.statusCode = 400;
-                res.send({ error: 'Validation error' });
-            } else {
-                res.statusCode = 500;
-                res.send({ error: 'Server error' });
-            }
-            log.error('Internal error(%d): %s',res.statusCode,err.message);
-        }
-    });
+  task.save(function (err) {
+    if (!err) {
+      log.info('task created');
+      return res.send({ status: 'OK', task : task });
+    } else {
+      console.log(err);
+      if (err.name == 'ValidationError') {
+        res.statusCode = 400;
+        res.send({ error: 'Validation error' });
+      } else {
+        res.statusCode = 500;
+        res.send({ error: 'Server error' });
+      }
+      log.error('Internal error(%d): %s', res.statusCode, err.message);
+    }
+  });
 });
 /*
 app.get('/api/tasks/:id', function(req, res) {
-    return TaskModel.findById(req.params.id, function (err, task) {
-        if(!task) {
-            res.statusCode = 404;
-            return res.send({ error: 'Not found' });
-        }
-        if (!err) {
-            return res.send({ status: 'OK', task:task });
-        } else {
-            res.statusCode = 500;
-            log.error('Internal error(%d): %s',res.statusCode,err.message);
-            return res.send({ error: 'Server error' });
-        }
-    });
+  return TaskModel.findById(req.params.id, function (err, task) {
+    if(!task) {
+      res.statusCode = 404;
+      return res.send({ error: 'Not found' });
+    }
+    if (!err) {
+      return res.send({ status: 'OK', task:task });
+    } else {
+      res.statusCode = 500;
+      log.error('Internal error(%d): %s',res.statusCode,err.message);
+      return res.send({ error: 'Server error' });
+    }
+  });
 });
 */
-app.put('/api/tasks/:id', isLoggedIn, function (req, res){
-    return TaskModel.findById(req.params.id, function (err, task) {
-        if(!task) {
-            res.statusCode = 404;
-            return res.send({ error: 'Not found' });
-        }
+app.put('/api/tasks/:id', isLoggedIn, function (req, res) {
+  return TaskModel.findById(req.params.id, function (err, task) {
+    if (!task) {
+      res.statusCode = 404;
+      return res.send({ error: 'Not found' });
+    }
 
-        task.title = req.body.title;
-        task.link = req.body.link;
-        task.time = req.body.time;
-        return task.save(function (err) {
-            if (!err) {
-                log.info("task updated");
-                return res.send({ status: 'OK', task:task });
-            } else {
-                if(err.name == 'ValidationError') {
-                    res.statusCode = 400;
-                    res.send({ error: 'Validation error' });
-                } else {
-                    res.statusCode = 500;
-                    res.send({ error: 'Server error' });
-                }
-                log.error('Internal error(%d): %s',res.statusCode,err.message);
-            }
-        });
+    task.title = req.body.title;
+    task.link = req.body.link;
+    task.time = req.body.time;
+    return task.save(function (err) {
+      if (!err) {
+        log.info('task updated');
+        return res.send({ status: 'OK', task : task });
+      } else {
+        if (err.name == 'ValidationError') {
+          res.statusCode = 400;
+          res.send({ error: 'Validation error' });
+        } else {
+          res.statusCode = 500;
+          res.send({ error: 'Server error' });
+        }
+        log.error('Internal error(%d): %s', res.statusCode, err.message);
+      }
     });
+  });
 });
 
-app.delete('/api/tasks/:id', isLoggedIn, function (req, res){
-    return TaskModel.findById(req.params.id, function (err, task) {
-        if(!task) {
-            res.statusCode = 404;
-            return res.send({ error: 'Not found' });
-        }
-        return task.remove(function (err) {
-            if (!err) {
-                log.info("task removed");
-                return res.send({ status: 'OK' });
-            } else {
-                res.statusCode = 500;
-                log.error('Internal error(%d): %s',res.statusCode,err.message);
-                return res.send({ error: 'Server error' });
-            }
-        });
+app.delete('/api/tasks/:id', isLoggedIn, function (req, res) {
+  return TaskModel.findById(req.params.id, function (err, task) {
+    if (!task) {
+      res.statusCode = 404;
+      return res.send({ error: 'Not found' });
+    }
+    return task.remove(function (err) {
+      if (!err) {
+        log.info('task removed');
+        return res.send({ status: 'OK' });
+      } else {
+        res.statusCode = 500;
+        log.error('Internal error(%d): %s', res.statusCode, err.message);
+        return res.send({ error: 'Server error' });
+      }
     });
+  });
 });
 
 app.put('/api/users/:id', isLoggedIn, function(req, res) {
-    return User.findById(req.params.id, function (err, user) {
-        if(!user) {
-            res.statusCode = 404;
-            return res.send({ error: 'Not found' });
-        }
+  return User.findById(req.params.id, function (err, user) {
+    if (!user) {
+      res.statusCode = 404;
+      return res.send({ error: 'Not found' });
+    }
 
-        user.cost = req.body.cost;
-        return user.save(function (err) {
-            if (!err) {
-                log.info("user updated");
-                return res.send({ status: 'OK', user:user });
-            } else {
-                if(err.name == 'ValidationError') {
-                    res.statusCode = 400;
-                    res.send({ error: 'Validation error' });
-                } else {
-                    res.statusCode = 500;
-                    res.send({ error: 'Server error' });
-                }
-                log.error('Internal error(%d): %s',res.statusCode,err.message);
-            }
-        });
+    user.cost = req.body.cost;
+    return user.save(function (err) {
+      if (!err) {
+        log.info('user updated');
+        return res.send({ status: 'OK', user: user });
+      } else {
+        if (err.name == 'ValidationError') {
+          res.statusCode = 400;
+          res.send({ error: 'Validation error' });
+        } else {
+          res.statusCode = 500;
+          res.send({ error: 'Server error' });
+        }
+        log.error('Internal error(%d): %s', res.statusCode, err.message);
+      }
     });
+  });
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
