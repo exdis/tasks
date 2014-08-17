@@ -197,13 +197,21 @@ body {
     padding: 15px;
   }
 }
-/* line 173, ../sass/screen.scss */
+/* line 172, ../sass/screen.scss */
+table td, table th {
+  background: #fff;
+}
+/* line 174, ../sass/screen.scss */
 table td:last-child, table th:last-child {
   width: 20px;
   text-align: center;
 }
+/* line 179, ../sass/screen.scss */
+table tbody {
+  border-top: none !important;
+}
 
-/* line 180, ../sass/screen.scss */
+/* line 184, ../sass/screen.scss */
 .loading {
   text-align: center;
 }

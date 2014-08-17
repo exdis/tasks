@@ -170,10 +170,14 @@ body {
 }
 table {
   td,th {
+    background: #fff;
     &:last-child {
       width: 20px;
       text-align: center;
     }
+  }
+  tbody {
+    border-top: none !important;
   }
 }
 

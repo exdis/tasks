@@ -56,6 +56,13 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
         out += ' (' + d.asHours() * $scope.settings.cost + ' rubles)';
         $scope.timeEntriesToday = out;
       };
+      $scope.daySeparator = function(curr, prev) {
+        if (prev === undefined) {
+          return true;
+        } else {
+          return !moment(curr.pubDate).isSame(moment(prev.pubDate), 'day');
+        }
+      };
       $scope.total = function(month) {
         var total = 0;
         angular.forEach($scope.datedTasks, function(v, k) {

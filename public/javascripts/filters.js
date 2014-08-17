@@ -11,5 +11,10 @@ define(['angular', 'services', 'moment'], function (angular, services, moment) {
         d.get('seconds') + 's';
         return out;
       };
+    })
+    .filter('day', function() {
+      return function(input) {
+        return moment(input).format('DD.MM.YYYY');
+      };
     });
 });
