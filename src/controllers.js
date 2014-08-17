@@ -34,7 +34,27 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
             $scope.datedTasks = data;
             $scope.total($scope.month);
           });
+          TasksDate.get({id : $scope.currentUser , year : moment().get('year'),
+          month : moment().get('month') + 1}, function(data) {
+            $scope.currentMonthData = data;
+            $scope.today();
+          });
         }
+      };
+      $scope.today = function() {
+        var total = 0;
+        angular.forEach($scope.currentMonthData, function(v, k) {
+          if (moment(v.pubDate).isSame(moment(), 'day')) {
+            total += parseInt(v.time);
+          }
+        });
+        var d = moment.duration(total);
+        var out;
+        out = 'Today you have ';
+        out += Math.floor(d.asHours()) + 'hours ' + d.get('minutes') +
+        'minutes ' + d.get('seconds') + 'seconds';
+        out += ' (' + d.asHours() * $scope.settings.cost + ' rubles)';
+        $scope.timeEntriesToday = out;
       };
       $scope.total = function(month) {
         var total = 0;
