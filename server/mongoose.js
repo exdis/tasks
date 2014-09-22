@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var log = require('./log')(module);
 var bcrypt = require('bcrypt-nodejs');
 
-mongoose.connect(process.env.OPENSHIFT_MONGO_DB_URL);
+mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
 var db = mongoose.connection;
 
 db.on('error', function (err) {
