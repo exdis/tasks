@@ -366,6 +366,11 @@ app.put('/api/users/:id', isLoggedIn, function(req, res) {
   });
 });
 
-http.createServer(app).listen(app.get('port'), app.get('ipaddr'), function() {
-  console.log('Express server listening on port ' + app.get('port'));
+var bower = 'HOME=$HOME/app-root/runtime ./node_modules/.bin/bower install';
+bower = process.env.OPENSHIFT_REPO_DIR ? bower : bower.substr(28);
+bower = require('child_process').exec(bower);
+bower.on('exit', function() {
+  http.createServer(app).listen(app.get('port'), app.get('ipaddr'), function() {
+    console.log('Express server listening on port ' + app.get('port'));
+  });
 });

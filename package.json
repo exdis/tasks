@@ -17,6 +17,7 @@
 		"connect-flash" : "latest",
 		"bcrypt-nodejs" : "latest",
 		"time": "*",
+		"bower": "latest",
 		"grunt" : "latest",
 		"grunt-notify" : "latest",
 		"grunt-contrib-jshint" : "latest",
