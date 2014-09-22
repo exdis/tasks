@@ -15,6 +15,7 @@
 		"passport-local" : "latest",
 		"connect-flash" : "latest",
 		"bcrypt-nodejs" : "latest",
+		"time": "*",
 		"grunt" : "latest",
 		"grunt-notify" : "latest",
 		"grunt-contrib-jshint" : "latest",
