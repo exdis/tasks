@@ -2,7 +2,6 @@
 .sass-cache/
 node_modules/
 public/javascripts/lib/
-.sublime-project
-.sublime-workspace
+*.sublime*
 .swp
 .orig
