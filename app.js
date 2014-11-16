@@ -16,6 +16,8 @@ var flash = require('connect-flash');
 var http = require('http');
 var path = require('path');
 
+var nodeExcel = require('excel-export');
+
 var app = express();
 
 // all environments
@@ -364,6 +366,39 @@ app.put('/api/users/:id', isLoggedIn, function(req, res) {
       }
     });
   });
+});
+
+app.get('/api/excel', isLoggedIn, function(req, res) {
+  var conf = {};
+  conf.cols = [
+    {
+      caption: 'Дата',
+      type: 'string',
+      width: 30
+    },
+    {
+      caption: 'Название',
+      type: 'sting',
+      width: 50
+    },
+    {
+      caption: 'Ссылка',
+      type: 'string',
+      width: 50
+    },
+    {
+      caption: 'Время',
+      type: 'number',
+      width: 30
+    }
+  ];
+  conf.rows = [
+    ['1.1.1970', 'Test', 'http://google.com', 1.5]
+  ];
+  var result = nodeExcel.execute(conf);
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+  res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+  res.end(result, 'binary');
 });
 
 var bower = 'HOME=$HOME/app-root/runtime ./node_modules/.bin/bower install';
