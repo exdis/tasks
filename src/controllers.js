@@ -12,6 +12,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
       });
       $scope.init = function(page, load) {
         $scope.page = page;
+        $scope.year = moment().get('year');
         if (typeof $scope.currentUser !== 'undefined') {
           if (typeof $scope.month === 'undefined' || $scope.month < 0) {
             $scope.month = moment().get('month');
@@ -40,6 +41,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
             $scope.today();
           });
         }
+        console.log($scope.month);
       };
       $scope.today = function() {
         var total = 0;

@@ -4,7 +4,8 @@
 		</div>
 		<div class="panel-body">
 			{{timeEntries}}<br>
-      {{timeEntriesToday}}
+      {{timeEntriesToday}}<br>
+      <a href="api/excel/{{year}}/{{month + 1}}" target="_blank">Export this month tasks to excel</a>
 		</div>
 		<div class="panel-footer">
 			<button type="button" class="btn btn-default" ng-click="prevMonth()"><span class="glyphicon glyphicon-step-backward"></span>Prev month</button>
