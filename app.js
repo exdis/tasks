@@ -16,6 +16,8 @@ var flash = require('connect-flash');
 var http = require('http');
 var path = require('path');
 
+var moment = require('moment');
+
 var nodeExcel = require('excel-export');
 
 var app = express();
@@ -223,7 +225,6 @@ app.get('/api/tasks/:id/:page', function(req, res) {
         count : count,
         tasks : tasks
       }
-      console.log(out);
       return res.send(out);
     } else {
       res.statusCode = 500;
@@ -238,7 +239,6 @@ app.get('/api/tasks/date/:id/:year/:month', function(req, res) {
   var month = req.params.month;
   var minmonth = year + ' ' + parseInt(month);
   var maxmonth = year + ' ' + (parseInt(month) + 1);
-  console.log(maxmonth);
   return TaskModel.find({userid : req.params.id, pubDate: {
     '$gte': new Date(minmonth),
     '$lt': new Date(maxmonth)
@@ -368,7 +368,7 @@ app.put('/api/users/:id', isLoggedIn, function(req, res) {
   });
 });
 
-app.get('/api/excel', isLoggedIn, function(req, res) {
+app.get('/api/excel/:year/:month', isLoggedIn, function(req, res) {
   var conf = {};
   conf.cols = [
     {
@@ -392,13 +392,35 @@ app.get('/api/excel', isLoggedIn, function(req, res) {
       width: 30
     }
   ];
-  conf.rows = [
-    ['1.1.1970', 'Test', 'http://google.com', 1.5]
-  ];
-  var result = nodeExcel.execute(conf);
-  res.setHeader('Content-Type', 'application/vnd.openxmlformats');
-  res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
-  res.end(result, 'binary');
+  var year = req.params.year;
+  var month = req.params.month;
+  var minmonth = year + ' ' + parseInt(month);
+  var maxmonth = year + ' ' + (parseInt(month) + 1);
+  return TaskModel.find({userid : req.user._id, pubDate: {
+    '$gte': new Date(minmonth),
+    '$lt': new Date(maxmonth)
+  }}, function (err, tasks) {
+    if (!err) {
+      conf.rows = [];
+      tasks.forEach(function(task) {
+        conf.rows.push([
+          moment(new Date(task.pubDate)).format('DD.MM.YYYY'),
+          task.title,
+          task.link,
+          moment.duration(parseInt(task.time, 10)).asHours().toFixed(2)
+        ]);
+      });
+      console.log(conf.rows);
+      var result = nodeExcel.execute(conf);
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+      res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+      res.end(result, 'binary');
+    } else {
+      res.statusCode = 500;
+      log.error('Internal error(%d): %s', res.statusCode, err.message);
+      return res.send({ error: 'Server error' });
+    }
+  });
 });
 
 var bower = 'HOME=$HOME/app-root/runtime ./node_modules/.bin/bower install';
