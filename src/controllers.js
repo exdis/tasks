@@ -53,7 +53,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
         out = 'Today you have ';
         out += Math.floor(d.asHours()) + 'hours ' + d.get('minutes') +
         'minutes ' + d.get('seconds') + 'seconds';
-        out += ' (' + d.asHours() * $scope.settings.cost + ' rubles)';
+        out += ' (' + (d.asHours() * $scope.settings.cost).toFixed(2) + ' rubles)';
         $scope.timeEntriesToday = out;
       };
       $scope.daySeparator = function(curr, prev) {
@@ -74,7 +74,7 @@ define(['angular', 'services', 'jquery', 'moment'], function (angular, services,
         month : month}).format('MMMM') + ' you have ';
         out += Math.floor(d.asHours()) + 'hours ' + d.get('minutes') +
         'minutes ' + d.get('seconds') + 'seconds';
-        out += ' (' + d.asHours() * $scope.settings.cost + ' rubles)';
+        out += ' (' + (d.asHours() * $scope.settings.cost).toFixed(2) + ' rubles)';
         $scope.timeEntries = out;
       };
       $scope.prevMonth = function() {
