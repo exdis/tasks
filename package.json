@@ -8,7 +8,7 @@
   "main": "app.js",
   "dependencies": {
     "bcrypt-nodejs": "latest",
-    "bower": "lastest",
+    "bower": "latest",
     "connect-flash": "latest",
     "ejs": "latest",
     "excel-export": "0.4.1",
