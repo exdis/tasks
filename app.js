@@ -238,7 +238,8 @@ app.get('/api/tasks/date/:id/:year/:month', function(req, res) {
   var year = req.params.year;
   var month = req.params.month;
   var minmonth = year + ' ' + parseInt(month);
-  var maxmonth = year + ' ' + (parseInt(month) + 1);
+  var maxmonth = month < 12 ? year + ' ' + (parseInt(month) + 1) :
+    year + ' 12 31 23:59:59';
   return TaskModel.find({userid : req.params.id, pubDate: {
     '$gte': new Date(minmonth),
     '$lt': new Date(maxmonth)
